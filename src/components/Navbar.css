@@ -1,0 +1,293 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: all 0.4s ease;
+}
+
+.navbar--transparent {
+  background: transparent;
+}
+
+.navbar--solid {
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+
+.navbar--scrolled.navbar--transparent {
+  background: rgba(26, 58, 92, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  gap: 24px;
+}
+
+/* Logo */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.navbar__logo-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.navbar__logo-img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+  flex-shrink: 0;
+}
+
+.navbar__logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.navbar__logo-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* На прозрачном фоне (главная, не проскроллено) — белый */
+.navbar--transparent:not(.navbar--scrolled) .navbar__logo-main {
+  color: var(--white);
+}
+
+/* После скролла на главной (синий фон) — белый */
+.navbar--transparent.navbar--scrolled .navbar__logo-main {
+  color: var(--white);
+}
+
+/* На белом фоне (другие страницы) — тёмный */
+.navbar--solid .navbar__logo-main {
+  color: var(--primary);
+}
+
+.navbar__logo-sub {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Links */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.navbar__link {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: var(--transition);
+  color: var(--gray-600);
+}
+
+/* Прозрачный navbar (главная) — белый текст */
+.navbar--transparent .navbar__link {
+  color: rgba(255,255,255,0.85);
+}
+
+/* Белый navbar (другие страницы или скролл на главной без синего) — тёмный */
+.navbar--solid .navbar__link {
+  color: var(--gray-600);
+}
+
+.navbar__link:hover {
+  color: var(--accent);
+  background: rgba(232,160,32,0.08);
+}
+
+.navbar--transparent .navbar__link:hover,
+.navbar--scrolled .navbar__link:hover {
+  color: var(--accent);
+  background: rgba(255,255,255,0.1);
+}
+
+.navbar__link--active {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+/* Right side */
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Language switcher */
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  background: rgba(0,0,0,0.08);
+  border-radius: 50px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.navbar--solid .lang-switcher {
+  background: var(--gray-100);
+}
+
+.lang-btn {
+  background: transparent;
+  border: none;
+  border-radius: 50px;
+  padding: 5px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.7);
+  transition: var(--transition);
+  font-family: 'Inter', sans-serif;
+}
+
+.navbar--solid .lang-btn {
+  color: var(--gray-600);
+}
+
+.lang-btn:hover {
+  color: var(--white);
+  background: rgba(255,255,255,0.15);
+}
+
+.navbar--solid .lang-btn:hover {
+  color: var(--primary);
+  background: var(--gray-200);
+}
+
+.lang-btn--active {
+  background: var(--accent) !important;
+  color: var(--white) !important;
+  box-shadow: 0 2px 8px rgba(232,160,32,0.4);
+}
+
+.lang-switcher--mobile {
+  background: var(--gray-100);
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.lang-switcher--mobile .lang-btn {
+  color: var(--gray-600);
+  flex: 1;
+  text-align: center;
+}
+
+/* CTA */
+.navbar__cta {
+  background: var(--accent);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 10px 22px;
+  border-radius: 50px;
+  transition: var(--transition);
+  white-space: nowrap;
+  box-shadow: 0 3px 12px rgba(232,160,32,0.4);
+}
+
+.navbar__cta:hover {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+/* Burger */
+.navbar__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.navbar__burger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+/* Прозрачный фон — белые линии бургера */
+.navbar--transparent .navbar__burger span {
+  background: var(--white);
+}
+
+/* Белый navbar — тёмные линии */
+.navbar--solid .navbar__burger span {
+  background: var(--primary);
+}
+
+.navbar__burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.navbar__burger.open span:nth-child(2) { opacity: 0; }
+.navbar__burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile menu */
+.navbar__mobile {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 24px 24px;
+  background: var(--white);
+  border-top: 1px solid var(--gray-100);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.navbar__mobile--open {
+  max-height: 400px;
+}
+
+.navbar__mobile-link {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: var(--gray-800);
+  transition: var(--transition);
+}
+
+.navbar__mobile-link:hover,
+.navbar__mobile-link.active {
+  background: var(--gray-100);
+  color: var(--primary);
+}
+
+@media (max-width: 900px) {
+  .navbar__links,
+  .navbar__right {
+    display: none;
+  }
+  .navbar__burger {
+    display: flex;
+  }
+  .navbar__mobile {
+    display: flex;
+  }
+}

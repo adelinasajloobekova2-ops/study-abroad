@@ -1,0 +1,4 @@
+/* App-level resets — component styles are in their own CSS files */
+main {
+  min-height: 100vh;
+}

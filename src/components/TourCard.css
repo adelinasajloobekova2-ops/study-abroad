@@ -1,0 +1,144 @@
+.tour-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  border: 1px solid var(--gray-100);
+}
+
+.tour-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.tour-card__img-wrap {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.tour-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.tour-card:hover .tour-card__img {
+  transform: scale(1.06);
+}
+
+.tour-card__category {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(255,255,255,0.92);
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+.tour-card__difficulty {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  color: var(--white);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+.tour-card__body {
+  padding: 20px;
+}
+
+.tour-card__meta {
+  display: flex;
+  gap: 14px;
+  font-size: 0.8rem;
+  color: var(--gray-400);
+  margin-bottom: 10px;
+}
+
+.tour-card__title {
+  font-size: 1.25rem;
+  color: var(--primary);
+  margin-bottom: 4px;
+  font-family: 'Playfair Display', serif;
+}
+
+.tour-card__subtitle {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  margin-bottom: 12px;
+}
+
+.tour-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.tour-card__stars {
+  color: var(--accent);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.tour-card__rating-val {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--gray-800);
+}
+
+.tour-card__reviews {
+  font-size: 0.8rem;
+  color: var(--gray-400);
+}
+
+.tour-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--gray-100);
+}
+
+.tour-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.tour-card__price-from {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+}
+
+.tour-card__price-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.tour-card__btn {
+  background: var(--primary);
+  color: var(--white);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 50px;
+  transition: var(--transition);
+}
+
+.tour-card__btn:hover {
+  background: var(--primary-light);
+  transform: translateX(2px);
+}
