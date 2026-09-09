@@ -55,8 +55,8 @@ export default function Footer() {
           <div className="footer__col">
             <h4 className="footer__col-title">{f.contacts}</h4>
             <ul className="footer__contact-list">
-              <li>📍 г. Бишкек, ул. Чуй 123</li>
-              <li>📞 +996 700 123 456</li>
+              <li>📍 г. Бишкек, ул. Орозбекова 136</li>
+              <li>📞 +996 0502054704</li>
               <li>✉️ info@nomadtourkg.com</li>
               <li>{f.hours}</li>
             </ul>

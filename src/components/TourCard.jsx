@@ -50,7 +50,7 @@ export default function TourCard({ tour }) {
         <div className="tour-card__footer">
           <div className="tour-card__price">
             <span className="tour-card__price-from">{t.card.from}</span>
-            <span className="tour-card__price-val">{tour.price.toLocaleString('ru')} ₸</span>
+            <span className="tour-card__price-val">{tour.price.toLocaleString('ru')} с</span>
           </div>
           <Link to="/contact" className="tour-card__btn">
             {t.card.details}

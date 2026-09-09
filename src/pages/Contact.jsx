@@ -129,7 +129,7 @@ export default function Contact() {
             <div className="contact-map">
               <div className="contact-map__placeholder">
                 <span>🗺️</span>
-                <p>г. Бишкек, ул. Чуй 123</p>
+                <p>г. Бишкек, ул. Орозбекова 136</p>
                 <p style={{ fontSize: '0.8rem', color: 'var(--gray-400)', marginTop: '4px' }}>
                   Кыргызстан, 720000
                 </p>
