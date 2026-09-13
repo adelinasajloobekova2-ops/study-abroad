@@ -1,5 +1,15 @@
 import { useState } from 'react'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '../firebase/config'
 import { useLang } from '../i18n/LanguageContext'
+import { toast } from 'react-toastify'
+import {
+  FiMapPin, FiPhone, FiMail, FiClock,
+  FiSend, FiCheckCircle
+} from 'react-icons/fi'
+import {
+  FaInstagram, FaTelegramPlane, FaWhatsapp, FaYoutube
+} from 'react-icons/fa'
 import './Contact.css'
 
 const tourOptions = [
@@ -11,17 +21,49 @@ const tourOptions = [
   'Тянь-Шань / Tian-Shan',
 ]
 
+const infoIconsList = [
+  <FiMapPin size={20} />,
+  <FiPhone size={20} />,
+  <FiMail size={20} />,
+  <FiClock size={20} />,
+]
+
 export default function Contact() {
   const { t } = useLang()
   const c = t.contact
 
-  const [form, setForm] = useState({ name: '', email: '', phone: '', tour: '', people: '', message: '' })
+  const [form, setForm] = useState({
+    name: '', email: '', phone: '', tour: '', people: '', message: ''
+  })
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending]     = useState(false)
 
-  const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  const handleSubmit = e => { e.preventDefault(); setSubmitted(true) }
+  const handleChange = e =>
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
 
-  const infoIcons = ['📍', '📞', '✉️', '🕐']
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setSending(true)
+    try {
+      await addDoc(collection(db, 'bookings'), {
+        ...form,
+        people:    form.people ? Number(form.people) : null,
+        status:    'new',
+        createdAt: serverTimestamp(),
+      })
+      setSubmitted(true)
+      toast.success('Заявка отправлена! Мы свяжемся с вами в течение 24 часов.')
+    } catch (err) {
+      console.error(err)
+      toast.error('Ошибка при отправке. Проверьте соединение и попробуйте снова.')
+    }
+    setSending(false)
+  }
+
+  const resetForm = () => {
+    setSubmitted(false)
+    setForm({ name: '', email: '', phone: '', tour: '', people: '', message: '' })
+  }
 
   return (
     <div className="page-wrapper">
@@ -48,7 +90,7 @@ export default function Contact() {
         <div className="contact-info-grid">
           {c.info.map((item, i) => (
             <div key={i} className="contact-info-card">
-              <span className="contact-info-card__icon">{infoIcons[i]}</span>
+              <span className="contact-info-card__icon">{infoIconsList[i]}</span>
               <div>
                 <div className="contact-info-card__label">{item.label}</div>
                 <div className="contact-info-card__val">{item.value}</div>
@@ -65,13 +107,12 @@ export default function Contact() {
 
             {submitted ? (
               <div className="contact-success">
-                <div className="contact-success__icon">✅</div>
+                <div className="contact-success__icon">
+                  <FiCheckCircle size={52} color="#27ae60" />
+                </div>
                 <h3>{c.successTitle}</h3>
                 <p>{c.successText}</p>
-                <button
-                  className="btn-primary"
-                  onClick={() => { setSubmitted(false); setForm({ name:'', email:'', phone:'', tour:'', people:'', message:'' }) }}
-                >
+                <button className="btn-primary" onClick={resetForm}>
                   {c.successBtn}
                 </button>
               </div>
@@ -117,8 +158,15 @@ export default function Contact() {
                     placeholder={c.messagePh} value={form.message} onChange={handleChange} />
                 </div>
 
-                <button type="submit" className="btn-primary contact-form__submit">
-                  {c.submit}
+                <button
+                  type="submit"
+                  className="btn-primary contact-form__submit"
+                  disabled={sending}
+                >
+                  {sending
+                    ? <><span className="contact-spinner" /> Отправка...</>
+                    : <><FiSend size={16} /> {c.submit}</>
+                  }
                 </button>
               </form>
             )}
@@ -128,7 +176,7 @@ export default function Contact() {
           <div className="contact-side">
             <div className="contact-map">
               <div className="contact-map__placeholder">
-                <span>🗺️</span>
+                <FiMapPin size={32} color="var(--accent)" />
                 <p>г. Бишкек, ул. Орозбекова 136</p>
                 <p style={{ fontSize: '0.8rem', color: 'var(--gray-400)', marginTop: '4px' }}>
                   Кыргызстан, 720000
@@ -139,10 +187,18 @@ export default function Contact() {
             <div className="contact-socials">
               <h4>{c.socialsTitle}</h4>
               <div className="contact-socials__grid">
-                <a href="#" className="contact-social-btn"><span>📷</span> Instagram</a>
-                <a href="#" className="contact-social-btn"><span>✈️</span> Telegram</a>
-                <a href="#" className="contact-social-btn"><span>💬</span> WhatsApp</a>
-                <a href="#" className="contact-social-btn"><span>▶️</span> YouTube</a>
+                <a href="#" className="contact-social-btn">
+                  <FaInstagram size={18} /> Instagram
+                </a>
+                <a href="#" className="contact-social-btn">
+                  <FaTelegramPlane size={18} /> Telegram
+                </a>
+                <a href="#" className="contact-social-btn">
+                  <FaWhatsapp size={18} /> WhatsApp
+                </a>
+                <a href="#" className="contact-social-btn">
+                  <FaYoutube size={18} /> YouTube
+                </a>
               </div>
             </div>
           </div>

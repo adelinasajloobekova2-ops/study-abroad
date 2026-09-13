@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useLang } from '../i18n/LanguageContext'
+import {
+  FiActivity, FiStar, FiDroplet, FiCamera, FiArrowRight
+} from 'react-icons/fi'
 import './About.css'
-
-const statsIcons = ['500+', '30+', '9', '4.9★']
 
 export default function About() {
   const { t } = useLang()
@@ -15,7 +16,12 @@ export default function About() {
     { value: '4.9★', label: t.stats.rating   },
   ]
 
-  const teamEmojis = ['🧗', '🌟', '🌿', '📸']
+  const teamIcons = [
+    <FiActivity size={32} />,
+    <FiStar size={32} />,
+    <FiDroplet size={32} />,
+    <FiCamera size={32} />,
+  ]
 
   return (
     <div className="page-wrapper">
@@ -45,7 +51,7 @@ export default function About() {
           <p>{ab.storyP1}</p>
           <p>{ab.storyP2}</p>
           <Link to="/contact" className="btn-primary" style={{ marginTop: '24px' }}>
-            {ab.storyCta}
+            {ab.storyCta} <FiArrowRight size={15} />
           </Link>
         </div>
         <div className="about-story__img">
@@ -96,7 +102,7 @@ export default function About() {
           <div className="about-team-grid">
             {ab.team.map((p, i) => (
               <div key={i} className="team-card">
-                <div className="team-card__avatar">{teamEmojis[i]}</div>
+                <div className="team-card__avatar">{teamIcons[i]}</div>
                 <h3 className="team-card__name">{p.name}</h3>
                 <span className="team-card__role">{p.role}</span>
                 <p className="team-card__bio">{p.bio}</p>

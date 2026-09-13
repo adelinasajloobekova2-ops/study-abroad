@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useLang } from '../i18n/LanguageContext'
+import { FiClock, FiUsers, FiStar, FiArrowRight } from 'react-icons/fi'
 import './TourCard.css'
 
-// category keys match data keys → translated label
 const CAT_KEYS = {
   'горы': 'mountains',
   'озёра': 'lakes',
@@ -13,7 +13,6 @@ const CAT_KEYS = {
 export default function TourCard({ tour }) {
   const { t } = useLang()
 
-  // map difficulty to translation key
   const diffMap = { 'Лёгкий': 'easy', 'Средний': 'medium', 'Сложный': 'hard' }
   const diffKey = diffMap[tour.difficulty] || 'easy'
   const diffLabel = t.card.difficulty[diffKey]
@@ -25,7 +24,10 @@ export default function TourCard({ tour }) {
   return (
     <div className="tour-card">
       <div className="tour-card__img-wrap">
-        <img src={tour.image} alt={tour.title} className="tour-card__img" loading="lazy" />
+        {tour.image
+          ? <img src={tour.image} alt={tour.title} className="tour-card__img" loading="lazy" />
+          : <div className="tour-card__img-placeholder"><FiClock size={32} color="var(--gray-400)" /></div>
+        }
         <span className="tour-card__category">{catLabel}</span>
         <span className="tour-card__difficulty" style={{ background: diffColor[diffKey] }}>
           {diffLabel}
@@ -34,15 +36,19 @@ export default function TourCard({ tour }) {
 
       <div className="tour-card__body">
         <div className="tour-card__meta">
-          <span>⏱ {tour.duration}</span>
-          <span>👥 {tour.groupSize}</span>
+          <span><FiClock size={13} style={{ verticalAlign: 'middle', marginRight: 4 }} />{tour.duration}</span>
+          <span><FiUsers size={13} style={{ verticalAlign: 'middle', marginRight: 4 }} />{tour.groupSize}</span>
         </div>
 
         <h3 className="tour-card__title">{tour.title}</h3>
         <p className="tour-card__subtitle">{tour.subtitle}</p>
 
         <div className="tour-card__rating">
-          <span className="tour-card__stars">{'★'.repeat(Math.round(tour.rating))}</span>
+          <span className="tour-card__stars">
+            {[1,2,3,4,5].map(i => (
+              <FiStar key={i} size={13} className={i <= Math.round(tour.rating) ? 'star-filled' : 'star-empty'} />
+            ))}
+          </span>
           <span className="tour-card__rating-val">{tour.rating}</span>
           <span className="tour-card__reviews">({tour.reviews})</span>
         </div>
@@ -53,7 +59,7 @@ export default function TourCard({ tour }) {
             <span className="tour-card__price-val">{tour.price.toLocaleString('ru')} с</span>
           </div>
           <Link to="/contact" className="tour-card__btn">
-            {t.card.details}
+            {t.card.details} <FiArrowRight size={14} />
           </Link>
         </div>
       </div>

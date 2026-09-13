@@ -3,6 +3,9 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import logoImg from '../assets/WhatsApp Image 2026-09-08 at 20.41.48.jpeg'
 import { useLang } from '../i18n/LanguageContext'
 import { useAuth } from '../firebase/AuthContext'
+import {
+  FiUser, FiLogOut, FiChevronDown, FiShield, FiMenu, FiX
+} from 'react-icons/fi'
 import './Navbar.css'
 
 const LANGS = [
@@ -30,7 +33,6 @@ export default function Navbar() {
 
   useEffect(() => { setMenuOpen(false); setDropOpen(false) }, [pathname])
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handler = (e) => { if (dropRef.current && !dropRef.current.contains(e.target)) setDropOpen(false) }
     document.addEventListener('mousedown', handler)
@@ -100,7 +102,7 @@ export default function Navbar() {
                 <span className="navbar__user-name">
                   {user.displayName || user.email?.split('@')[0]}
                 </span>
-                <span className="navbar__user-caret">▾</span>
+                <FiChevronDown size={14} style={{ marginLeft: 2 }} />
               </button>
 
               {dropOpen && (
@@ -112,19 +114,19 @@ export default function Navbar() {
                   <div className="navbar__dropdown-divider" />
                   {user.isAdmin && (
                     <Link to="/admin" className="navbar__dropdown-item">
-                      🛡️ {t.nav.admin}
+                      <FiShield size={14} /> {t.nav.admin}
                     </Link>
                   )}
                   <button className="navbar__dropdown-item navbar__dropdown-item--logout"
                     onClick={handleLogout}>
-                    🚪 {t.nav.logout}
+                    <FiLogOut size={14} /> {t.nav.logout}
                   </button>
                 </div>
               )}
             </div>
           ) : (
             <Link to="/login" className="navbar__cta">
-              {t.nav.login}
+              <FiUser size={15} /> {t.nav.login}
             </Link>
           )}
         </div>
@@ -132,7 +134,7 @@ export default function Navbar() {
         {/* Burger */}
         <button className={`navbar__burger ${menuOpen ? 'open' : ''}`}
           onClick={() => setMenuOpen(v => !v)} aria-label="Меню">
-          <span /><span /><span />
+          {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
         </button>
       </div>
 
@@ -160,18 +162,18 @@ export default function Navbar() {
             <div className="navbar__mobile-user">
               {user.isAdmin && (
                 <Link to="/admin" className="navbar__mobile-link">
-                  🛡️ {t.nav.admin}
+                  <FiShield size={14} /> {t.nav.admin}
                 </Link>
               )}
             </div>
             <button className="btn-primary" style={{ justifyContent: 'center', background: '#c0392b' }}
               onClick={handleLogout}>
-              🚪 {t.nav.logout}
+              <FiLogOut size={15} /> {t.nav.logout}
             </button>
           </div>
         ) : (
           <Link to="/login" className="btn-primary" style={{ marginTop: '8px', justifyContent: 'center' }}>
-            {t.nav.login}
+            <FiUser size={15} /> {t.nav.login}
           </Link>
         )}
       </div>

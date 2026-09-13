@@ -164,3 +164,43 @@
   color: rgba(255,255,255,0.75);
   font-size: 0.95rem;
 }
+
+/* ── Loading state ── */
+.tours-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 80px 0;
+  color: var(--gray-400);
+  font-size: 0.9rem;
+}
+
+.tours-spinner {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--gray-200);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: tours-spin 0.8s linear infinite;
+}
+
+@keyframes tours-spin { to { transform: rotate(360deg); } }
+
+/* ── Home loading ── */
+.home-tours-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.home-tours-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--gray-600);
+}
+.home-tours-empty p {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}

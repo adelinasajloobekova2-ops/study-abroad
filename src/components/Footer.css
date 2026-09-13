@@ -101,6 +101,17 @@
   color: rgba(255,255,255,0.55);
 }
 
+.footer__contact-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer__contact-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
 .footer__bottom {
   padding: 24px 0;
   display: flex;

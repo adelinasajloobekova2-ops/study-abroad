@@ -1,27 +1,38 @@
 import { useState } from 'react'
-import { tours } from '../data/tours'
+import { useTours } from '../firebase/useTours'
 import TourCard from '../components/TourCard'
 import { useLang } from '../i18n/LanguageContext'
+import {
+  FiGlobe, FiTriangle, FiDroplet, FiBook, FiZap,
+  FiArrowRight, FiSearch
+} from 'react-icons/fi'
 import './Tours.css'
 
-// internal data keys → translation sub-keys
 const CAT_DATA_KEYS = ['все', 'горы', 'озёра', 'культура', 'приключения']
 const CAT_I18N_KEYS = ['all', 'mountains', 'lakes', 'culture', 'adventure']
 
+const catIcons = [
+  <FiGlobe size={16} />,
+  <FiTriangle size={16} />,
+  <FiDroplet size={16} />,
+  <FiBook size={16} />,
+  <FiZap size={16} />,
+]
+
 export default function Tours() {
   const { t } = useLang()
-  const [activeCat, setActiveCat] = useState('все')   // always stored as data key
+  const { tours, loading } = useTours()
+
+  const [activeCat, setActiveCat] = useState('все')
   const [sortBy, setSortBy]       = useState('rating')
 
   const filtered = tours
     .filter(tour => activeCat === 'все' || tour.category === activeCat)
     .sort((a, b) => {
-      if (sortBy === 'price-asc')  return a.price - b.price
-      if (sortBy === 'price-desc') return b.price - a.price
-      return b.rating - a.rating
+      if (sortBy === 'price-asc')  return (a.price || 0) - (b.price || 0)
+      if (sortBy === 'price-desc') return (b.price || 0) - (a.price || 0)
+      return (b.rating || 0) - (a.rating || 0)
     })
-
-  const catEmojis = ['🌍', '🏔️', '🏞️', '🎭', '🧗']
 
   return (
     <div className="page-wrapper">
@@ -39,7 +50,9 @@ export default function Tours() {
             {t.tours.badge}
           </span>
           <h1 className="tours-page__title">{t.tours.title}</h1>
-          <p className="tours-page__subtitle">{tours.length} {t.tours.subtitle}</p>
+          <p className="tours-page__subtitle">
+            {loading ? '...' : tours.length} {t.tours.subtitle}
+          </p>
         </div>
       </div>
 
@@ -53,7 +66,7 @@ export default function Tours() {
                 className={`tours-filters__cat ${activeCat === dataKey ? 'active' : ''}`}
                 onClick={() => setActiveCat(dataKey)}
               >
-                {catEmojis[i]}{' '}
+                {catIcons[i]}{' '}
                 {t.tours.cats[CAT_I18N_KEYS[i]]}
               </button>
             ))}
@@ -69,19 +82,32 @@ export default function Tours() {
           </div>
         </div>
 
-        <p className="tours-page__count">
-          {t.tours.found} <strong>{filtered.length}</strong> {t.tours.foundSuffix}
-        </p>
-
-        {filtered.length > 0 ? (
-          <div className="tours-grid-page">
-            {filtered.map(tour => <TourCard key={tour.id} tour={tour} />)}
+        {loading ? (
+          <div className="tours-loading">
+            <span className="tours-spinner" />
+            <p>Загружаем туры...</p>
           </div>
         ) : (
-          <div className="tours-empty">
-            <span>🔍</span>
-            <p>{t.tours.empty}</p>
-          </div>
+          <>
+            <p className="tours-page__count">
+              {t.tours.found} <strong>{filtered.length}</strong> {t.tours.foundSuffix}
+            </p>
+
+            {filtered.length > 0 ? (
+              <div className="tours-grid-page">
+                {filtered.map(tour => <TourCard key={tour.id} tour={tour} />)}
+              </div>
+            ) : (
+              <div className="tours-empty">
+                <FiSearch size={40} color="var(--gray-400)" />
+                <p>
+                  {tours.length === 0
+                    ? 'Туры ещё не добавлены. Зайдите в админ-панель и создайте первый тур.'
+                    : t.tours.empty}
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -92,7 +118,9 @@ export default function Tours() {
             <h3>{t.tours.ctaTitle}</h3>
             <p>{t.tours.ctaSubtitle}</p>
           </div>
-          <a href="/contact" className="btn-primary">{t.tours.ctaBtn}</a>
+          <a href="/contact" className="btn-primary">
+            {t.tours.ctaBtn} <FiArrowRight size={15} />
+          </a>
         </div>
       </div>
     </div>

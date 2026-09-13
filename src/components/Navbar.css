@@ -217,66 +217,62 @@
 /* Burger */
 .navbar__burger {
   display: none;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px;
-}
-
-.navbar__burger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--primary);
-  border-radius: 2px;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--primary);
   transition: var(--transition);
 }
 
-/* Прозрачный фон — белые линии бургера */
-.navbar--transparent .navbar__burger span {
-  background: var(--white);
+.navbar--transparent .navbar__burger {
+  color: var(--white);
 }
 
-/* Белый navbar — тёмные линии */
-.navbar--solid .navbar__burger span {
-  background: var(--primary);
+.navbar--solid .navbar__burger {
+  color: var(--primary);
 }
 
-.navbar__burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.navbar__burger.open span:nth-child(2) { opacity: 0; }
-.navbar__burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.navbar__burger:hover {
+  background: rgba(255,255,255,0.12);
+}
 
 /* Mobile menu */
 .navbar__mobile {
   display: none;
   flex-direction: column;
   gap: 4px;
-  padding: 16px 24px 24px;
+  padding: 0 16px;
   background: var(--white);
   border-top: 1px solid var(--gray-100);
-  max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease;
+  max-height: 0;
+  transition: max-height 0.35s ease, padding 0.35s ease;
 }
 
 .navbar__mobile--open {
-  max-height: 400px;
+  max-height: 480px;
+  padding: 16px 16px 20px;
 }
 
 .navbar__mobile-link {
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 500;
+  font-size: 1rem;
   color: var(--gray-800);
   transition: var(--transition);
+  display: block;
 }
 
 .navbar__mobile-link:hover,
 .navbar__mobile-link.active {
   background: var(--gray-100);
   color: var(--primary);
+  padding-left: 20px;
 }
 
 @media (max-width: 900px) {
@@ -289,6 +285,11 @@
   }
   .navbar__mobile {
     display: flex;
+  }
+
+  /* Когда меню закрыто — убираем border чтобы не торчала линия */
+  .navbar__mobile:not(.navbar__mobile--open) {
+    border-top-color: transparent;
   }
 }
 
@@ -458,4 +459,31 @@
   align-items: center;
   justify-content: center;
   font-size: 2rem;
+}
+
+/* ── Navbar CTA flex fix ── */
+.navbar__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Mobile menu auth ── */
+.navbar__mobile-auth {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-100);
+}
+
+/* ── Mobile компактный lang switcher ── */
+@media (max-width: 480px) {
+  .hero__stat {
+    padding: 14px 12px;
+  }
+  .hero__stat-val {
+    font-size: 1.25rem;
+  }
+  .hero__stat-label {
+    font-size: 0.68rem;
+  }
 }

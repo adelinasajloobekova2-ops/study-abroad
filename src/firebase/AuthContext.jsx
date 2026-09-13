@@ -3,6 +3,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged,
   updateProfile,
@@ -19,30 +21,42 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Обрабатываем результат редиректа Google (если был)
+    getRedirectResult(auth).then(async (result) => {
+      if (result?.user) {
+        await saveUser(result.user)
+      }
+    }).catch(() => {})
+
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        const ref  = doc(db, 'users', firebaseUser.uid)
-        const snap = await getDoc(ref)
+        try {
+          const ref  = doc(db, 'users', firebaseUser.uid)
+          const snap = await getDoc(ref)
 
-        let profile = {}
+          let profile = {}
 
-        if (snap.exists()) {
-          profile = snap.data()
-        } else {
-          // Документа нет — создаём (актуально для admin и старых пользователей)
-          profile = {
-            uid:         firebaseUser.uid,
-            email:       firebaseUser.email,
-            displayName: firebaseUser.displayName || '',
-            photoURL:    firebaseUser.photoURL || '',
-            role:        firebaseUser.email === ADMIN_EMAIL ? 'admin' : 'user',
-            createdAt:   serverTimestamp(),
+          if (snap.exists()) {
+            profile = snap.data()
+          } else {
+            profile = {
+              uid:         firebaseUser.uid,
+              email:       firebaseUser.email,
+              displayName: firebaseUser.displayName || '',
+              photoURL:    firebaseUser.photoURL || '',
+              role:        firebaseUser.email === ADMIN_EMAIL ? 'admin' : 'user',
+              createdAt:   serverTimestamp(),
+            }
+            await setDoc(ref, profile)
           }
-          await setDoc(ref, profile)
-        }
 
-        const isAdmin = firebaseUser.email === ADMIN_EMAIL || profile.role === 'admin'
-        setUser({ ...firebaseUser, profile, isAdmin })
+          const isAdmin = firebaseUser.email === ADMIN_EMAIL || profile.role === 'admin'
+          setUser({ ...firebaseUser, profile, isAdmin })
+        } catch {
+          // Если нет прав на чтение — всё равно авторизуем
+          const isAdmin = firebaseUser.email === ADMIN_EMAIL
+          setUser({ ...firebaseUser, profile: {}, isAdmin })
+        }
       } else {
         setUser(null)
       }
@@ -52,19 +66,21 @@ export function AuthProvider({ children }) {
   }, [])
 
   const saveUser = async (firebaseUser, extra = {}) => {
-    const ref  = doc(db, 'users', firebaseUser.uid)
-    const snap = await getDoc(ref)
-    if (!snap.exists()) {
-      await setDoc(ref, {
-        uid:         firebaseUser.uid,
-        email:       firebaseUser.email,
-        displayName: firebaseUser.displayName || extra.displayName || '',
-        photoURL:    firebaseUser.photoURL || '',
-        role:        firebaseUser.email === ADMIN_EMAIL ? 'admin' : 'user',
-        createdAt:   serverTimestamp(),
-        ...extra,
-      })
-    }
+    try {
+      const ref  = doc(db, 'users', firebaseUser.uid)
+      const snap = await getDoc(ref)
+      if (!snap.exists()) {
+        await setDoc(ref, {
+          uid:         firebaseUser.uid,
+          email:       firebaseUser.email,
+          displayName: firebaseUser.displayName || extra.displayName || '',
+          photoURL:    firebaseUser.photoURL || '',
+          role:        firebaseUser.email === ADMIN_EMAIL ? 'admin' : 'user',
+          createdAt:   serverTimestamp(),
+          ...extra,
+        })
+      }
+    } catch { /* права ещё не настроены */ }
   }
 
   const register = async (email, password, displayName) => {
@@ -80,9 +96,8 @@ export function AuthProvider({ children }) {
   }
 
   const loginWithGoogle = async () => {
-    const { user: u } = await signInWithPopup(auth, googleProvider)
-    await saveUser(u)
-    return u
+    // Используем redirect вместо popup — нет COOP-предупреждений
+    await signInWithRedirect(auth, googleProvider)
   }
 
   const logout = () => signOut(auth)

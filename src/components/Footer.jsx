@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useLang } from '../i18n/LanguageContext'
+import {
+  FaInstagram, FaTelegramPlane, FaWhatsapp, FaYoutube
+} from 'react-icons/fa'
+import {
+  FiMapPin, FiPhone, FiMail, FiClock
+} from 'react-icons/fi'
 import './Footer.css'
 
 export default function Footer() {
@@ -13,7 +19,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="footer__brand">
             <div className="footer__logo">
-              <span>🏔️</span>
+              <span className="footer__logo-icon">🏔️</span>
               <div>
                 <div className="footer__logo-main">Nomad Tour KG</div>
                 <div className="footer__logo-sub">Kyrgyzstan</div>
@@ -21,10 +27,18 @@ export default function Footer() {
             </div>
             <p className="footer__desc">{f.desc}</p>
             <div className="footer__socials">
-              <a href="#" aria-label="Instagram" className="footer__social">📷</a>
-              <a href="#" aria-label="Telegram"  className="footer__social">✈️</a>
-              <a href="#" aria-label="WhatsApp"  className="footer__social">💬</a>
-              <a href="#" aria-label="YouTube"   className="footer__social">▶️</a>
+              <a href="#" aria-label="Instagram" className="footer__social">
+                <FaInstagram size={18} />
+              </a>
+              <a href="#" aria-label="Telegram" className="footer__social">
+                <FaTelegramPlane size={18} />
+              </a>
+              <a href="#" aria-label="WhatsApp" className="footer__social">
+                <FaWhatsapp size={18} />
+              </a>
+              <a href="#" aria-label="YouTube" className="footer__social">
+                <FaYoutube size={18} />
+              </a>
             </div>
           </div>
 
@@ -47,7 +61,7 @@ export default function Footer() {
               <li><Link to="/about">{f.links.about}</Link></li>
               <li><Link to="/tours">{f.links.tours}</Link></li>
               <li><Link to="/contact">{f.links.contact}</Link></li>
-              <li><Link to="/contact">{f.links.reviews}</Link></li>
+              <li><Link to="/reviews">{f.links.reviews}</Link></li>
             </ul>
           </div>
 
@@ -55,10 +69,10 @@ export default function Footer() {
           <div className="footer__col">
             <h4 className="footer__col-title">{f.contacts}</h4>
             <ul className="footer__contact-list">
-              <li>📍 г. Бишкек, ул. Орозбекова 136</li>
-              <li>📞 +996 0502054704</li>
-              <li>✉️ info@nomadtourkg.com</li>
-              <li>{f.hours}</li>
+              <li><FiMapPin size={14} className="footer__contact-icon" /> г. Бишкек, ул. Орозбекова 136</li>
+              <li><FiPhone size={14} className="footer__contact-icon" /> +996 0502054704</li>
+              <li><FiMail size={14} className="footer__contact-icon" /> info@nomadtourkg.com</li>
+              <li><FiClock size={14} className="footer__contact-icon" /> {f.hours}</li>
             </ul>
           </div>
         </div>
